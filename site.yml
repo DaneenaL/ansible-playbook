@@ -1,0 +1,31 @@
+---
+- name: Install ClickHouse
+  hosts: clickhouse
+  pre_tasks:
+    - name: Обновить кеш apt перед установкой
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+  roles:
+    - clickhouse
+  post_tasks:
+    - name: Создать базу для логов
+      command: "clickhouse-client --host {{ clickhouse_client_host }} -q 'CREATE DATABASE IF NOT EXISTS {{ clickhouse_log_db }}'"
+      changed_when: false
+
+- name: Install Vector
+  hosts: vector
+  roles:
+    - vector-role
+
+- name: Install LightHouse
+  hosts: lighthouse
+  roles:
+    - lighthouse-role
+  post_tasks:
+    - name: Проверить, что LightHouse отвечает по HTTP
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:{{ lighthouse_port }}/"
+        status_code: 200
+      delegate_to: localhost

@@ -1,0 +1,16 @@
+---
+all:
+  children:
+    clickhouse:
+      hosts:
+        clickhouse-01:
+          ansible_host: 153.51.171.158
+    vector:
+      hosts:
+        clickhouse-01:
+    lighthouse:
+      hosts:
+        lighthouse-01:
+          ansible_host: 153.51.164.162
+  vars:
+    ansible_user: yc-user

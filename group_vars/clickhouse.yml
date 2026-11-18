@@ -1,0 +1,6 @@
+---
+clickhouse_version: "22.3.3.44"
+clickhouse_listen_host:
+  - "0.0.0.0"
+clickhouse_log_db: logs
+clickhouse_client_host: "127.0.0.1"
